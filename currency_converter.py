@@ -22,13 +22,13 @@ def print_currencies(currencies):
     print()
     
 
-def exchange_rate(currency1, currency2):
+def exchange_rate(currency1, currency2, currencies):
     endpoint = f'convert?from={currency1}&to={currency2}&amount=1&api_key={beacon_api_key}'
     url = beacon_base_url + endpoint
     
     try:
         data = requests.get(url).json()['response']
-        secondary_data = get_currencies()
+        secondary_data = currencies
         currency1_name = [d['name'] for d in secondary_data if currency1 in d.values()][0]
         currency2_name = [d['name'] for d in secondary_data if currency2 in d.values()][0]
     except:
@@ -42,13 +42,13 @@ def exchange_rate(currency1, currency2):
         return rate
 
     
-def convert(currency1, currency2, amount):
+def convert(currency1, currency2, amount, currencies):
     endpoint = f'convert?from={currency1}&to={currency2}&amount={amount}&api_key={beacon_api_key}'
     url = beacon_base_url + endpoint
 
     try:
         data = requests.get(url).json()['response']
-        secondary_data = get_currencies()
+        secondary_data = currencies
         currency1_name = [d['name'] for d in secondary_data if currency1 in d.values()][0]
         currency2_name = [d['name'] for d in secondary_data if currency2 in d.values()][0]
     except:
@@ -86,11 +86,11 @@ def main():
             currency1 = input('Enter a base currency: ').upper()
             amount = input(f'Enter an amount in {currency1}: ')
             currency2 = input('Enter a currency to convert to: ').upper()
-            convert(currency1, currency2, amount)
+            convert(currency1, currency2, amount, currencies)
         elif command == 'rate':
             currency1 = input('Enter a base currency: ').upper()
             currency2 = input('Enter a currency to convert to: ').upper()
-            exchange_rate(currency1, currency2)
+            exchange_rate(currency1, currency2, currencies)
         else:
             print('Unrecognized command!')
             print()
